@@ -1,0 +1,43 @@
+package main
+
+import (
+	"fmt"
+	bolt "go.etcd.io/bbolt"
+	"testing"
+)
+
+func init() {
+	_ = setupManager()
+}
+
+func TestCursor(t *testing.T) {
+	if err := mgr.db.View(func(tx *bolt.Tx) error {
+		bucket := tx.Bucket(radioBucket)
+		cursor := bucket.Cursor()
+
+		for k, v := cursor.First(); k != nil; k, v = cursor.Next() {
+			fmt.Printf("key=%s, value=%s\n", k, v)
+		}
+		return nil
+	}); nil != err {
+		t.Error(err)
+	}
+}
+
+func TestFind(t *testing.T) {
+	data, err := mgr.Find([]byte("140931"))
+	if nil != err {
+		t.Error(err)
+		return
+	} else {
+		t.Log(string(data))
+	}
+
+	data, err = mgr.Find([]byte("1"))
+	if nil != err {
+		t.Error(err)
+		return
+	} else {
+		t.Log(data)
+	}
+}

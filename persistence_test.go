@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	bolt "go.etcd.io/bbolt"
 	"testing"
@@ -16,6 +17,8 @@ func TestCursor(t *testing.T) {
 		cursor := bucket.Cursor()
 
 		for k, v := cursor.First(); k != nil; k, v = cursor.Next() {
+			var radio Radio
+			_ = json.Unmarshal(v, &radio)
 			fmt.Printf("key=%s, value=%s\n", k, v)
 		}
 		return nil

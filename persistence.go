@@ -49,6 +49,22 @@ func (m *dbManager) Find(key []byte) ([]byte, error) {
 	return result, nil
 }
 
+func (m *dbManager) All() ([][]byte, error) {
+	m.RLock()
+	defer m.RUnlock()
+	var result [][]byte
+	err := m.db.View(func(tx *bolt.Tx) error {
+		bucket := tx.Bucket(radioBucket)
+		cursor := bucket.Cursor()
+
+		for k, v := cursor.First(); k != nil; k, v = cursor.Next() {
+			result = append(result, v)
+		}
+		return nil
+	})
+	return result, err
+}
+
 func (m *dbManager) Insert(key, value []byte) error {
 	m.Lock()
 	defer m.Unlock()

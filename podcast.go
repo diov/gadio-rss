@@ -47,29 +47,37 @@ func defaultRss() *Rss {
 	}
 }
 
-func (r *Rss) Xml() (string, error) {
+func (r *Rss) Xml() ([]byte, error) {
 	var buf bytes.Buffer
 	if _, err := buf.Write([]byte(xml.Header)); err != nil {
-		return "", err
+		return nil, err
 	}
 	enc := xml.NewEncoder(&buf)
 	enc.Indent("", "  ")
 
 	if err := enc.Encode(r); err != nil {
-		return "", err
+		return nil, err
 	}
-	return buf.String(), nil
+	return buf.Bytes(), nil
 }
 
 type Channel struct {
-	Title       string  `xml:"title"`
-	Description string  `xml:"description"`
-	Link        string  `xml:"link"`
-	Language    string  `xml:"language"`
-	Copyright   string  `xml:"copyright"`
-	Image       *Image  `xml:"image"`
-	Item        []*Item `xml:"item"`
-	ItunesChannel
+	Title         string `xml:"title"`
+	Description   string `xml:"description"`
+	Link          string `xml:"link"`
+	Language      string `xml:"language"`
+	Copyright     string `xml:"copyright"`
+	Image         *Image `xml:"image"`
+	ItunesChannel `xml:",omitempty"`
+	Item          []*Item `xml:"item"`
+}
+
+func (c *Channel) Itunes(category string, explicit bool) {
+	c.ItunesChannel = ItunesChannel{
+		Image:    ItunesImage{c.Image.Url},
+		Category: ItunesCategory{category},
+		Explicit: explicit,
+	}
 }
 
 type Image struct {
@@ -79,14 +87,25 @@ type Image struct {
 }
 
 type Item struct {
-	Title           string   `xml:"title"`
-	Description     CData    `xml:"description"`
-	PubDate         *PubDate `xml:"pubDate"`
-	EnclosureUrl    string   `xml:"enclosure>url"`
-	EnclosureLength string   `xml:"enclosure>length"`
-	EnclosureType   string   `xml:"enclosure>type"`
-	Guid            string   `xml:"guid"`
+	Title       string    `xml:"title"`
+	Description CData     `xml:"description"`
+	PubDate     *PubDate  `xml:"pubDate"`
+	Enclosure   Enclosure `xml:"enclosure"`
+	Guid        string    `xml:"guid"`
 	ItunesItem
+}
+
+func (i *Item) Itunes(duration int, image string) {
+	i.ItunesItem = ItunesItem{
+		Duration: duration,
+		Image:    ItunesImage{image},
+	}
+}
+
+type Enclosure struct {
+	Url    string `xml:"url,attr"`
+	Length string `xml:"length,attr"`
+	Type   string `xml:"type,attr"`
 }
 
 type PubDate struct {

@@ -7,11 +7,11 @@ type ItunesChannel struct {
 }
 
 type ItunesImage struct {
-	Href string `xml:"href,attr"`
+	Href string `xml:"href,attr,omitempty"`
 }
 
 type ItunesCategory struct {
-	Text string `xml:"text,attr"`
+	Text string `xml:"text,attr,omitempty"`
 }
 
 type ItunesItem struct {

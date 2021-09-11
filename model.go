@@ -1,6 +1,7 @@
 package main
 
 import (
+	"sync"
 	"time"
 )
 
@@ -14,23 +15,32 @@ func (r Response) toRadio() []Radio {
 	included := r.Included
 	radios := make([]Radio, len(data))
 
+	var wg sync.WaitGroup
 	for i, datum := range data {
-		attr := datum.Attributes
-		category := datum.getCategory(included)
-		media := datum.getMedia(included)
-		radio := Radio{
-			ID:          datum.ID,
-			Title:       attr.Title,
-			Description: attr.Description,
-			Thumb:       datum.getThumb(),
-			PublishAt:   datum.getPublish(),
-			Category:    category.Name,
-			Audio:       media.getAudio(),
-			Duration:    media.Duration,
-		}
-		radios[i] = radio
+		wg.Add(1)
+
+		go func(i int, datum Data) {
+			defer wg.Done()
+			attr := datum.Attributes
+			category := datum.getCategory(included)
+			media := datum.getMedia(included)
+			audio := media.getAudio()
+			radio := Radio{
+				ID:          datum.ID,
+				Title:       attr.Title,
+				Description: cleanString(attr.Description),
+				Thumb:       datum.getThumb(),
+				PublishAt:   datum.getPublish(),
+				Category:    category.Name,
+				Audio:       audio,
+				Length:      remoteContentLength(audio),
+				Duration:    media.Duration,
+			}
+			radios[i] = radio
+		}(i, datum)
 	}
 
+	wg.Wait()
 	return radios
 }
 
@@ -108,7 +118,7 @@ type Category struct {
 
 type Media struct {
 	Audio    string `json:"audio"`    // type: media
-	Duration uint   `json:"duration"` // type: media
+	Duration int    `json:"duration"` // type: media
 }
 
 func (m Media) getAudio() string {
@@ -127,5 +137,13 @@ type Radio struct {
 	PublishAt   time.Time `json:"publish_at"`
 	Category    string    `json:"category"`
 	Audio       string    `json:"audio"`
-	Duration    uint      `json:"duration"`
+	Length      int64     `json:"length"`
+	Duration    int       `json:"duration"`
 }
+
+// ByPublishAt implements sort.Interface based on the Radio PublishAt field.
+type ByPublishAt []*Radio
+
+func (a ByPublishAt) Len() int           { return len(a) }
+func (a ByPublishAt) Less(i, j int) bool { return a[i].PublishAt.After(a[j].PublishAt) }
+func (a ByPublishAt) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }

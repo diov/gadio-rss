@@ -12,6 +12,7 @@ import (
 
 const (
 	pageSize    = 10
+	userAgent   = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36 Edg/93.0.961.44"
 	domain      = "www.gcores.com"
 	imageDomain = "https://image.gcores.com/"
 	audioDomain = "https://alioss.gcores.com/uploads/audio/"
@@ -47,9 +48,7 @@ func fetch(page int, forceRefresh bool) {
 		log.Println("get radios failed", err)
 		return
 	}
-	defer func() {
-		_ = resp.Body.Close()
-	}()
+	defer func() { _ = resp.Body.Close() }()
 
 	var response Response
 	err = json.NewDecoder(resp.Body).Decode(&response)
@@ -71,6 +70,6 @@ func fetch(page int, forceRefresh bool) {
 		return
 	}
 
-	time.Sleep(time.Duration(rand.Intn(10)+5) * time.Second)
+	time.Sleep(time.Duration(rand.Intn(5)) * time.Second)
 	fetch(page+1, forceRefresh)
 }

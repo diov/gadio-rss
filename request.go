@@ -30,7 +30,7 @@ func generateEndPoint(offset int) string {
 		"sort":             "-published-at",
 		"include":          "media,category",
 		"filter[list-all]": "0",
-		"fields[radios]":   "title,desc,thumb,published-at,media,duration,category",
+		"fields[radios]":   "title,desc,thumb,published-at,media,duration,category,content",
 	}
 	q := u.Query()
 	for k, v := range params {

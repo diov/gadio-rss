@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"strings"
 	"sync"
 	"time"
 )
@@ -28,13 +30,13 @@ func (r Response) toRadio() []Radio {
 			radio := Radio{
 				ID:          datum.ID,
 				Title:       attr.Title,
-				Description: cleanString(attr.Description),
+				Description: datum.getDescription(),
 				Thumb:       datum.getThumb(),
 				PublishAt:   datum.getPublish(),
 				Category:    category.Name,
 				Audio:       audio,
 				Length:      remoteContentLength(audio),
-				Duration:    media.Duration,
+				Duration:    attr.Duration,
 			}
 			radios[i] = radio
 		}(i, datum)
@@ -51,6 +53,8 @@ type Data struct {
 		Description string `json:"desc"`
 		Thumb       string `json:"thumb"`
 		PublishedAt string `json:"published-at"`
+		Duration    int    `json:"duration"`
+		Content     string `json:"content"`
 	} `json:"attributes"`
 	Relationships struct {
 		Category Relation `json:"category"`
@@ -64,6 +68,29 @@ func (d Data) getThumb() string {
 		thumb = imageDomain + thumb
 	}
 	return thumb
+}
+
+func (d Data) getDescription() string {
+	attr := d.Attributes
+
+	var builder strings.Builder
+	builder.WriteString(attr.Description)
+	builder.WriteString("\\n")
+	if len(attr.Content) > 0 {
+		var block ContentBlock
+		if err := json.Unmarshal([]byte(attr.Content), &block); nil == err {
+			for _, b := range block.Blocks {
+				if strings.Contains(b.Text, "时间轴") {
+					continue
+				}
+				builder.WriteString(b.Text)
+				builder.WriteString("\\n")
+			}
+		}
+	}
+
+	desc := builder.String()
+	return cleanString(desc)
 }
 
 func (d Data) getPublish() time.Time {
@@ -96,6 +123,12 @@ func (d Data) getMedia(fields []Field) Media {
 	return Media{}
 }
 
+type ContentBlock struct {
+	Blocks []struct {
+		Text string `json:"text"`
+	} `json:"blocks"`
+}
+
 type Relation struct {
 	Data struct {
 		Type string `json:"type"`
@@ -117,8 +150,7 @@ type Category struct {
 }
 
 type Media struct {
-	Audio    string `json:"audio"`    // type: media
-	Duration int    `json:"duration"` // type: media
+	Audio string `json:"audio"` // type: media
 }
 
 func (m Media) getAudio() string {

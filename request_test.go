@@ -1,6 +1,11 @@
 package main
 
-import "testing"
+import (
+	"encoding/json"
+	"log"
+	"net/http"
+	"testing"
+)
 
 func TestEndPoint(t *testing.T) {
 	endpoint := generateEndPoint(10)
@@ -8,7 +13,21 @@ func TestEndPoint(t *testing.T) {
 }
 
 func TestFetch(t *testing.T) {
-	fetch(0, false)
+	endPoint := generateEndPoint(10)
+	resp, err := http.Get(endPoint)
+	if nil != err {
+		log.Println("get radios failed", err)
+		return
+	}
+	defer func() { _ = resp.Body.Close() }()
+
+	var response Response
+	_ = json.NewDecoder(resp.Body).Decode(&response)
+	radios := response.toRadio()
+
+	rss := generateRss(radios)
+	xml, err := rss.Xml()
+	t.Log(string(xml))
 }
 
 func TestContentLength(t *testing.T) {

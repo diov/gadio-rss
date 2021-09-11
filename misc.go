@@ -13,7 +13,7 @@ func isUrlValid(str string) bool {
 	return nil == err
 }
 
-func shouldStop(radios []Radio) bool {
+func shouldStop(radios []*Radio) bool {
 	if len(radios) < pageSize {
 		return true
 	}

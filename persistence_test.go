@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	bolt "go.etcd.io/bbolt"
+	"strings"
 	"testing"
 )
 
@@ -19,7 +20,10 @@ func TestCursor(t *testing.T) {
 		for k, v := cursor.First(); k != nil; k, v = cursor.Next() {
 			var radio Radio
 			_ = json.Unmarshal(v, &radio)
-			fmt.Printf("key=%s, value=%s\n", k, v)
+			if strings.Contains(radio.Title, "搬了新家") {
+				fmt.Printf("key=%s, value=%s\n", k, v)
+			}
+			//fmt.Printf("key=%s, value=%s\n", k, v)
 		}
 		return nil
 	}); nil != err {

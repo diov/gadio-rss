@@ -12,10 +12,10 @@ type Response struct {
 	Included []Field `json:"included"`
 }
 
-func (r Response) toRadio() []Radio {
+func (r Response) toRadio() []*Radio {
 	data := r.Data
 	included := r.Included
-	radios := make([]Radio, len(data))
+	radios := make([]*Radio, len(data))
 
 	var wg sync.WaitGroup
 	for i, datum := range data {
@@ -38,7 +38,7 @@ func (r Response) toRadio() []Radio {
 				Length:      remoteContentLength(audio),
 				Duration:    attr.Duration,
 			}
-			radios[i] = radio
+			radios[i] = &radio
 		}(i, datum)
 	}
 
@@ -75,16 +75,13 @@ func (d Data) getDescription() string {
 
 	var builder strings.Builder
 	builder.WriteString(attr.Description)
-	builder.WriteString("\\n")
+	builder.WriteString("<br/>")
 	if len(attr.Content) > 0 {
 		var block ContentBlock
 		if err := json.Unmarshal([]byte(attr.Content), &block); nil == err {
 			for _, b := range block.Blocks {
-				if strings.Contains(b.Text, "时间轴") {
-					continue
-				}
-				builder.WriteString(b.Text)
-				builder.WriteString("\\n")
+				replaced := strings.ReplaceAll(b.Text, "\n", "<br/>")
+				builder.WriteString(replaced)
 			}
 		}
 	}

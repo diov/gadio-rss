@@ -12,14 +12,12 @@ var flags struct {
 	Output       string
 }
 
-func init() {
+func main() {
 	flag.BoolVar(&flags.ForceRefresh, "R", false, "Force refresh record")
 	flag.StringVar(&flags.Token, "T", "", "Github token")
 	flag.StringVar(&flags.Output, "O", "gcores.xml", "Output feed file path")
 	flag.Parse()
-}
 
-func main() {
 	log.SetOutput(os.Stdout)
 	if err := setupManager(); nil != err {
 		log.Fatalln(err)

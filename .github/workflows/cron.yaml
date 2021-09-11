@@ -1,10 +1,7 @@
 name: Daily Refresh
 on:
-#  schedule:
-#    - cron: '0 0,12 * * *'
-  push:
-    branches:
-      - main
+  schedule:
+    - cron: '0 0,12 * * *'
 
 jobs:
   build:
@@ -32,7 +29,7 @@ jobs:
         run: go build -o target/gadio-rss
       - name: Execute Binray
         run: ./target/gadio-rss -T ${{ secrets.BOT_KEY }}
-      - name: Update Stage
+      - name: Self-Push
         run: |
           git config user.name diov-bot
           git config user.email bot@mail.dio.wtf

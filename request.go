@@ -40,8 +40,8 @@ func generateEndPoint(offset int) string {
 	return u.String()
 }
 
-func fetch(page int, forceRefresh bool) {
-	log.Printf("start fet %d page radios", page+1)
+func fetch(page int) {
+	log.Printf("start fetch %d page radios", page+1)
 	endPoint := generateEndPoint(page * pageSize)
 	resp, err := http.Get(endPoint)
 	if nil != err {
@@ -58,7 +58,7 @@ func fetch(page int, forceRefresh bool) {
 	}
 
 	radios := response.toRadio()
-	stop := shouldStop(radios, forceRefresh)
+	stop := shouldStop(radios)
 	log.Printf("%d page fetch %d radios", page+1, len(radios))
 	for _, radio := range radios {
 		marshal, _ := json.Marshal(radio)
@@ -71,5 +71,5 @@ func fetch(page int, forceRefresh bool) {
 	}
 
 	time.Sleep(time.Duration(rand.Intn(5)) * time.Second)
-	fetch(page+1, forceRefresh)
+	fetch(page + 1)
 }

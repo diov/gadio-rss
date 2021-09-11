@@ -74,3 +74,12 @@ func (m *dbManager) Insert(key, value []byte) error {
 	})
 	return err
 }
+
+func (m *dbManager) Drop() error {
+	m.Lock()
+	defer m.Unlock()
+	err := m.db.Update(func(tx *bolt.Tx) error {
+		return tx.DeleteBucket(radioBucket)
+	})
+	return err
+}

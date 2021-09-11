@@ -13,11 +13,9 @@ func isUrlValid(str string) bool {
 	return nil == err
 }
 
-func shouldStop(radios []Radio, forceRefresh bool) bool {
+func shouldStop(radios []Radio) bool {
 	if len(radios) < pageSize {
 		return true
-	} else if forceRefresh {
-		return false
 	}
 
 	for _, radio := range radios {
@@ -60,4 +58,13 @@ func cleanString(str string) string {
 		return -1
 	}, str)
 	return clean
+}
+
+func fileSize(path string) int64 {
+	fi, err := os.Stat(path)
+	if err != nil {
+		return 0
+	}
+	// get the size
+	return fi.Size()
 }

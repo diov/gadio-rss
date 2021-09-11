@@ -70,7 +70,10 @@ func (m *dbManager) Insert(key, value []byte) error {
 	defer m.Unlock()
 	err := m.db.Update(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket(radioBucket)
-		return bucket.Put(key, value)
+		if data := bucket.Get(key); len(data) <= 0 {
+			return bucket.Put(key, value)
+		}
+		return nil
 	})
 	return err
 }

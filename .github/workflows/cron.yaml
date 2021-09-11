@@ -1,7 +1,8 @@
 name: Daily Refresh
 on:
-  schedule:
-    - cron: '0 0,12 * * *'
+  push:
+    branches:
+      - main
 
 jobs:
   build:

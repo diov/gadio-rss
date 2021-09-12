@@ -4,26 +4,25 @@ import (
 	"encoding/json"
 	"fmt"
 	bolt "go.etcd.io/bbolt"
-	"strings"
 	"testing"
 )
 
 func init() {
-	_ = setupManager()
+	_ = setupDbManager()
 }
 
 func TestCursor(t *testing.T) {
-	if err := mgr.db.View(func(tx *bolt.Tx) error {
+	if err := dbMgr.db.View(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket(radioBucket)
 		cursor := bucket.Cursor()
 
 		for k, v := cursor.First(); k != nil; k, v = cursor.Next() {
 			var radio Radio
 			_ = json.Unmarshal(v, &radio)
-			if strings.Contains(radio.Title, "搬了新家") {
-				fmt.Printf("key=%s, value=%s\n", k, v)
-			}
-			//fmt.Printf("key=%s, value=%s\n", k, v)
+			//if strings.Contains(radio.Title, "搬了新家") {
+			//	fmt.Printf("key=%s, value=%s\n", k, v)
+			//}
+			fmt.Printf("key=%s, value=%s\n", k, v)
 		}
 		return nil
 	}); nil != err {
@@ -32,7 +31,7 @@ func TestCursor(t *testing.T) {
 }
 
 func TestFind(t *testing.T) {
-	data, err := mgr.Find([]byte("140931"))
+	data, err := dbMgr.Find([]byte("140931"))
 	if nil != err {
 		t.Error(err)
 		return
@@ -40,7 +39,7 @@ func TestFind(t *testing.T) {
 		t.Log(string(data))
 	}
 
-	data, err = mgr.Find([]byte("1"))
+	data, err = dbMgr.Find([]byte("1"))
 	if nil != err {
 		t.Error(err)
 		return

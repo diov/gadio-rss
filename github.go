@@ -12,7 +12,8 @@ import (
 
 const (
 	sourceOwner  = "diov"
-	sourceRepo   = "wiki"
+	sourceRepo   = "gadio-rss"
+	targetRepo   = "wiki"
 	commitBranch = "main"
 )
 
@@ -21,51 +22,91 @@ var (
 	authorName    = "diov-bot"
 	authorEmail   = "bot@mail.dio.wtf"
 	commitMessage = "Upgrade gadio rss feed"
+	tempFilePath  = "target/artifact.zip"
+	gitMgr        *gitManager
 )
 
-func pushFeedFile(path, token string) error {
+type gitManager struct {
+	client *github.Client
+}
+
+func setupGitManager(token string) {
 	ts := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: token},
 	)
 	tc := oauth2.NewClient(ctx, ts)
 	client := github.NewClient(tc)
-	ref, err := getRef(client)
+	gitMgr = &gitManager{client: client}
+}
+
+func (m *gitManager) getPreviousArtifact() error {
+	if nil == gitMgr {
+		return nil
+	}
+
+	opts := &github.ListOptions{Page: 1}
+	artifacts, _, err := m.client.Actions.ListArtifacts(ctx, sourceOwner, sourceRepo, opts)
+	if artifacts.GetTotalCount() <= 0 {
+		return nil
+	}
+	artifact := artifacts.Artifacts[0]
+	url, _, err := gitMgr.client.Actions.DownloadArtifact(ctx, sourceOwner, sourceRepo, artifact.GetID(), true)
+	if nil != err {
+		return err
+	}
+	err = downloadFile(url.String(), tempFilePath)
+	if nil != err {
+		return err
+	}
+	err = unzipFile(tempFilePath)
+	if nil != err {
+		return err
+	}
+	return err
+}
+
+func (m *gitManager) pushFeedFile(path string) error {
+	if nil == gitMgr {
+		return nil
+	}
+
+	ref, err := m.getRef()
 	if err != nil {
 		return err
 	}
 	if ref == nil {
 		return err
 	}
-	tree, err := getTree(client, ref, path)
+	tree, err := m.getTree(ref, path)
 	if err != nil {
 		return err
 	}
 
-	if err := pushCommit(client, ref, tree); err != nil {
+	if err := m.pushCommit(ref, tree); err != nil {
 		return err
 	}
 	return nil
 }
 
-func getRef(client *github.Client) (ref *github.Reference, err error) {
-	ref, _, err = client.Git.GetRef(ctx, sourceOwner, sourceRepo, "refs/heads/"+commitBranch)
+func (m *gitManager) getRef() (ref *github.Reference, err error) {
+	ref, _, err = m.client.Git.GetRef(ctx, sourceOwner, targetRepo, "refs/heads/"+commitBranch)
 	return ref, err
 }
 
-func getTree(client *github.Client, ref *github.Reference, path string) (tree *github.Tree, err error) {
+func (m *gitManager) getTree(ref *github.Reference, path string) (tree *github.Tree, err error) {
 	// Create a tree with what to commit.
 	var entries []*github.TreeEntry
 
-	file, content, err := getFileContent(path)
+	file, content, err := m.getFileContent(path)
 	if err != nil {
 		return nil, err
 	}
 	entries = append(entries, &github.TreeEntry{Path: github.String(file), Type: github.String("blob"), Content: github.String(string(content)), Mode: github.String("100644")})
-	tree, _, err = client.Git.CreateTree(ctx, sourceOwner, sourceRepo, *ref.Object.SHA, entries)
+	tree, _, err = m.client.Git.CreateTree(ctx, sourceOwner, targetRepo, *ref.Object.SHA, entries)
 	return tree, err
 }
 
-func getFileContent(fileArg string) (targetName string, b []byte, err error) {
+func (m *gitManager) getFileContent(fileArg string) (targetName string, b []byte, err error) {
 	var localFile string
 	files := strings.Split(fileArg, ":")
 	switch {
@@ -83,9 +124,9 @@ func getFileContent(fileArg string) (targetName string, b []byte, err error) {
 	return targetName, b, err
 }
 
-func pushCommit(client *github.Client, ref *github.Reference, tree *github.Tree) (err error) {
+func (m *gitManager) pushCommit(ref *github.Reference, tree *github.Tree) (err error) {
 	// Get the parent commit to attach the commit to.
-	parent, _, err := client.Repositories.GetCommit(ctx, sourceOwner, sourceRepo, *ref.Object.SHA, nil)
+	parent, _, err := m.client.Repositories.GetCommit(ctx, sourceOwner, targetRepo, *ref.Object.SHA, nil)
 	if err != nil {
 		return err
 	}
@@ -96,13 +137,13 @@ func pushCommit(client *github.Client, ref *github.Reference, tree *github.Tree)
 	date := time.Now()
 	author := &github.CommitAuthor{Date: &date, Name: &authorName, Email: &authorEmail}
 	commit := &github.Commit{Author: author, Message: &commitMessage, Tree: tree, Parents: []*github.Commit{parent.Commit}}
-	newCommit, _, err := client.Git.CreateCommit(ctx, sourceOwner, sourceRepo, commit)
+	newCommit, _, err := m.client.Git.CreateCommit(ctx, sourceOwner, targetRepo, commit)
 	if err != nil {
 		return err
 	}
 
 	// Attach the commit to the master branch.
 	ref.Object.SHA = newCommit.SHA
-	_, _, err = client.Git.UpdateRef(ctx, sourceOwner, sourceRepo, ref, false)
+	_, _, err = m.client.Git.UpdateRef(ctx, sourceOwner, targetRepo, ref, false)
 	return err
 }

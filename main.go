@@ -19,16 +19,22 @@ func main() {
 	flag.Parse()
 
 	log.SetOutput(os.Stdout)
-	if err := setupManager(); nil != err {
+	if err := setupDbManager(); nil != err {
 		log.Fatalln(err)
 	}
-
-	if flags.ForceRefresh {
-		_ = mgr.Drop()
+	if "" != flags.Token {
+		setupGitManager(flags.Token)
+		if err := gitMgr.getPreviousArtifact(); nil != err {
+			log.Printf("Fetch previous db failed: %v\n", err)
+		}
 	}
+	if flags.ForceRefresh {
+		_ = dbMgr.Drop()
+	}
+
 	fetch(0)
 
-	all, err := mgr.All()
+	all, err := dbMgr.All()
 	if nil != err {
 		log.Fatalln(err)
 	}
@@ -49,11 +55,9 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	if "" != flags.Token {
-		if err := pushFeedFile(flags.Output, flags.Token); nil != err {
-			log.Fatalln(err)
-		} else {
-			log.Println("New feed has pushed to wiki")
-		}
+	if err := gitMgr.pushFeedFile(flags.Output); nil != err {
+		log.Fatalln(err)
+	} else {
+		log.Println("New feed has pushed to wiki")
 	}
 }

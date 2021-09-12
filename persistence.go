@@ -7,7 +7,7 @@ import (
 
 var (
 	radioBucket = []byte("radio")
-	mgr         *dbManager
+	dbMgr       *dbManager
 )
 
 type dbManager struct {
@@ -15,7 +15,7 @@ type dbManager struct {
 	db *bolt.DB
 }
 
-func setupManager() error {
+func setupDbManager() error {
 	db, err := bolt.Open("record.db", 0600, nil)
 	if nil != err {
 		return err
@@ -27,7 +27,7 @@ func setupManager() error {
 	if nil != err {
 		return err
 	}
-	mgr = &dbManager{
+	dbMgr = &dbManager{
 		db: db,
 	}
 	return nil

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"archive/zip"
+	"io"
 	"net/http"
 	"net/url"
 	"os"
@@ -19,7 +21,7 @@ func shouldStop(radios []*Radio) bool {
 	}
 
 	for _, radio := range radios {
-		data, _ := mgr.Find([]byte(radio.ID))
+		data, _ := dbMgr.Find([]byte(radio.ID))
 		if len(data) > 0 {
 			return true
 		}
@@ -67,4 +69,46 @@ func fileSize(path string) int64 {
 	}
 	// get the size
 	return fi.Size()
+}
+
+func downloadFile(url, dest string) error {
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
+	}
+	out, err := os.Create(dest)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		_ = out.Close()
+		_ = resp.Body.Close()
+	}()
+	_, err = io.Copy(out, resp.Body)
+	return err
+}
+
+func unzipFile(path string) error {
+	archive, err := zip.OpenReader(path)
+	if nil != err {
+		return err
+	}
+	defer func() { _ = archive.Close() }()
+
+	for _, file := range archive.File {
+		dstFile, err := os.OpenFile(file.Name, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, file.Mode())
+		if nil != err {
+			return err
+		}
+		fileInArchive, err := file.Open()
+		if nil != err {
+			return err
+		}
+		if _, err := io.Copy(dstFile, fileInArchive); err != nil {
+			return err
+		}
+		_ = dstFile.Close()
+		_ = fileInArchive.Close()
+	}
+	return nil
 }

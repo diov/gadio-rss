@@ -12,12 +12,8 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: 1.17
-      - name: Check out code into the Go module directory
+      - name: Check out code
         uses: actions/checkout@v2
-        with:
-          lfs: true
-      - name: Checkout LFS objects
-        run: git lfs checkout
       - name: Cache go module
         uses: actions/cache@v2
         with:
@@ -35,11 +31,14 @@ jobs:
           path: record.db
           retention-days: 1
       - name: Self-Push
+        shell: bash
         run: |
-          git config user.name diov-bot
-          git config user.email bot@mail.dio.wtf
-          git add .
-          git commit -a -m "Update record (Github Action)"
-          git push
-
-        
+          if [[ $(git ls-files -m) ]]; then
+            git config user.name diov-bot
+            git config user.email bot@mail.dio.wtf
+            git add .
+            git commit -a -m "Update record (Github Action)"
+            git push
+          else
+            echo "nothing to commit, working tree clean"
+          fi

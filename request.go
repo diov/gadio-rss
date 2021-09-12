@@ -62,7 +62,7 @@ func fetch(page int) {
 	log.Printf("%d page fetch %d radios", page+1, len(radios))
 	for _, radio := range radios {
 		marshal, _ := json.Marshal(radio)
-		if err := mgr.Insert([]byte(radio.ID), marshal); nil != err {
+		if err := dbMgr.Insert([]byte(radio.ID), marshal); nil != err {
 			log.Println(err)
 		}
 	}

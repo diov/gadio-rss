@@ -19,14 +19,14 @@ func main() {
 	flag.Parse()
 
 	log.SetOutput(os.Stdout)
-	if err := setupDbManager(); nil != err {
-		log.Fatalln(err)
-	}
 	if "" != flags.Token {
 		setupGitManager(flags.Token)
 		if err := gitMgr.getPreviousArtifact(); nil != err {
 			log.Printf("Fetch previous db failed: %v\n", err)
 		}
+	}
+	if err := setupDbManager(); nil != err {
+		log.Fatalln(err)
 	}
 	if flags.ForceRefresh {
 		_ = dbMgr.Drop()
@@ -38,7 +38,7 @@ func main() {
 	if nil != err {
 		log.Fatalln(err)
 	}
-
+	return
 	radios := generateRadios(all)
 	rss := generateRss(radios)
 	xml, err := rss.Xml()

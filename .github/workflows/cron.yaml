@@ -1,7 +1,7 @@
 name: Daily Refresh
-on:
-  schedule:
-    - cron: '0 0,12 * * *'
+on: push
+#  schedule:
+#    - cron: '0 0,12 * * *'
 
 jobs:
   build:
@@ -29,6 +29,11 @@ jobs:
         run: go build -o target/gadio-rss
       - name: Execute Binray
         run: ./target/gadio-rss -T ${{ secrets.BOT_KEY }}
+      - name: Artifact Database
+        uses: actions/upload-artifact@v2
+        with:
+          path: record.db
+          retention-days: 1
       - name: Self-Push
         run: |
           git config user.name diov-bot

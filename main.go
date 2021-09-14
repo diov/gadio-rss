@@ -38,7 +38,7 @@ func main() {
 	if nil != err {
 		log.Fatalln(err)
 	}
-	return
+
 	radios := generateRadios(all)
 	rss := generateRss(radios)
 	xml, err := rss.Xml()

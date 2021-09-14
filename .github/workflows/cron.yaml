@@ -1,7 +1,7 @@
 name: Daily Refresh
 on:
   schedule:
-    - cron: '15 0,12 * * *'
+    - cron: '15 0,8,16 * * *'
 
 jobs:
   build:

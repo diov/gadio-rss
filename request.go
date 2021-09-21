@@ -40,13 +40,13 @@ func generateEndPoint(offset int) string {
 	return u.String()
 }
 
-func fetch(page int) {
+func fetch(page int) error {
 	log.Printf("start fetch %d page radios", page+1)
 	endPoint := generateEndPoint(page * pageSize)
 	resp, err := http.Get(endPoint)
 	if nil != err {
 		log.Println("get radios failed", err)
-		return
+		return err
 	}
 	defer func() { _ = resp.Body.Close() }()
 
@@ -54,7 +54,7 @@ func fetch(page int) {
 	err = json.NewDecoder(resp.Body).Decode(&response)
 	if nil != err {
 		log.Println("parse json failed", err)
-		return
+		return err
 	}
 
 	radios := response.toRadio()
@@ -67,9 +67,9 @@ func fetch(page int) {
 		}
 	}
 	if stop {
-		return
+		return nil
 	}
 
 	time.Sleep(time.Duration(rand.Intn(5)) * time.Second)
-	fetch(page + 1)
+	return fetch(page + 1)
 }

@@ -29,7 +29,9 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	fetch(0)
+	if err := fetch(0); nil != err {
+		log.Fatalln(err)
+	}
 
 	all, err := dbMgr.All()
 	if nil != err {

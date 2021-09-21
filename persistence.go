@@ -15,12 +15,17 @@ type dbManager struct {
 	db *bolt.DB
 }
 
-func setupDbManager() error {
+func setupDbManager(refresh bool) error {
 	db, err := bolt.Open("record.db", 0600, nil)
 	if nil != err {
 		return err
 	}
 	err = db.Update(func(tx *bolt.Tx) error {
+		if refresh {
+			if err = tx.DeleteBucket(radioBucket); nil != err {
+				return err
+			}
+		}
 		_, err := tx.CreateBucketIfNotExists(radioBucket)
 		return err
 	})
@@ -74,15 +79,6 @@ func (m *dbManager) Insert(key, value []byte) error {
 			return bucket.Put(key, value)
 		}
 		return nil
-	})
-	return err
-}
-
-func (m *dbManager) Drop() error {
-	m.Lock()
-	defer m.Unlock()
-	err := m.db.Update(func(tx *bolt.Tx) error {
-		return tx.DeleteBucket(radioBucket)
 	})
 	return err
 }

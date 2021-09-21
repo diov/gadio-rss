@@ -2,6 +2,12 @@ name: Daily Refresh
 on:
   schedule:
     - cron: '15 0,8,16 * * *'
+  workflow_dispatch:
+    inputs:
+      refresh:
+        description: "Refresh stored db"
+        required: false
+        default: "false"
 
 jobs:
   build:
@@ -24,7 +30,7 @@ jobs:
       - name: Build
         run: go build -o target/gadio-rss
       - name: Execute Binray
-        run: ./target/gadio-rss -T ${{ secrets.BOT_KEY }}
+        run: ./target/gadio-rss -T ${{ secrets.BOT_KEY }} -R ${{ github.event.inputs.refresh }}
       - name: Artifact Database
         uses: actions/upload-artifact@v2
         with:

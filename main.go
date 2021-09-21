@@ -25,11 +25,8 @@ func main() {
 			log.Printf("Fetch previous db failed: %v\n", err)
 		}
 	}
-	if err := setupDbManager(); nil != err {
+	if err := setupDbManager(flags.ForceRefresh); nil != err {
 		log.Fatalln(err)
-	}
-	if flags.ForceRefresh {
-		_ = dbMgr.Drop()
 	}
 
 	fetch(0)

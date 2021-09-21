@@ -79,9 +79,12 @@ func (d Data) getDescription() string {
 	if len(attr.Content) > 0 {
 		var block ContentBlock
 		if err := json.Unmarshal([]byte(attr.Content), &block); nil == err {
-			for _, b := range block.Blocks {
+			for i, b := range block.Blocks {
 				replaced := strings.ReplaceAll(b.Text, "\n", "<br/>")
 				builder.WriteString(replaced)
+				if i < len(block.Blocks)-1 {
+					builder.WriteString("<br/>")
+				}
 			}
 		}
 	}
@@ -173,6 +176,11 @@ type Radio struct {
 // ByPublishAt implements sort.Interface based on the Radio PublishAt field.
 type ByPublishAt []*Radio
 
-func (a ByPublishAt) Len() int           { return len(a) }
-func (a ByPublishAt) Less(i, j int) bool { return a[i].PublishAt.After(a[j].PublishAt) }
-func (a ByPublishAt) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByPublishAt) Len() int { return len(a) }
+func (a ByPublishAt) Less(i, j int) bool {
+	if a[i].PublishAt.Equal(a[j].PublishAt) {
+		return a[i].ID > a[j].ID
+	}
+	return a[i].PublishAt.After(a[j].PublishAt)
+}
+func (a ByPublishAt) Swap(i, j int) { a[i], a[j] = a[j], a[i] }

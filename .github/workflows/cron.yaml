@@ -4,10 +4,10 @@ on:
     - cron: '15 0,8,16 * * *'
   workflow_dispatch:
     inputs:
-      refresh:
-        description: "Refresh stored db"
+      args:
+        description: "Additional arguments"
         required: false
-        default: "false"
+        default: ""
 
 jobs:
   build:
@@ -30,7 +30,7 @@ jobs:
       - name: Build
         run: go build -o target/gadio-rss
       - name: Execute Binray
-        run: ./target/gadio-rss -T ${{ secrets.BOT_KEY }} -R ${{ github.event.inputs.refresh }}
+        run: ./target/gadio-rss -T ${{ secrets.BOT_KEY }} ${{ github.event.inputs.args }}
       - name: Artifact Database
         uses: actions/upload-artifact@v2
         with:

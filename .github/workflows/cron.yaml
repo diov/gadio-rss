@@ -15,13 +15,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
         with:
-          go-version: 1.17
+          go-version: 'stable'
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Cache go module
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
@@ -32,7 +32,7 @@ jobs:
       - name: Execute Binray
         run: ./target/gadio-rss -T ${{ secrets.BOT_KEY }} ${{ github.event.inputs.args }}
       - name: Artifact Database
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           path: record.db
           retention-days: 1

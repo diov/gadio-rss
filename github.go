@@ -3,11 +3,12 @@ package main
 import (
 	"context"
 	"errors"
-	"github.com/google/go-github/v39/github"
-	"golang.org/x/oauth2"
 	"io/ioutil"
 	"strings"
 	"time"
+
+	"github.com/google/go-github/v39/github"
+	"golang.org/x/oauth2"
 )
 
 const (
@@ -46,6 +47,9 @@ func (m *gitManager) getPreviousArtifact() error {
 
 	opts := &github.ListOptions{Page: 1}
 	artifacts, _, err := m.client.Actions.ListArtifacts(ctx, sourceOwner, sourceRepo, opts)
+	if nil != err {
+		return err
+	}
 	if artifacts.GetTotalCount() <= 0 {
 		return nil
 	}

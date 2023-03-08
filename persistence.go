@@ -1,8 +1,9 @@
 package main
 
 import (
-	bolt "go.etcd.io/bbolt"
 	"sync"
+
+	bolt "go.etcd.io/bbolt"
 )
 
 var (

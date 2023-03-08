@@ -19,7 +19,7 @@ func main() {
 	flag.Parse()
 
 	log.SetOutput(os.Stdout)
-	if "" != flags.Token {
+	if flags.Token != "" {
 		setupGitManager(flags.Token)
 		if err := gitMgr.getPreviousArtifact(); nil != err {
 			log.Printf("Fetch previous db failed: %v\n", err)

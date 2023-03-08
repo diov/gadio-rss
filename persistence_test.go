@@ -3,12 +3,13 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	bolt "go.etcd.io/bbolt"
 	"testing"
+
+	bolt "go.etcd.io/bbolt"
 )
 
 func init() {
-	_ = setupDbManager()
+	_ = setupDbManager(false)
 }
 
 func TestCursor(t *testing.T) {

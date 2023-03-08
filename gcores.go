@@ -4,7 +4,10 @@ import (
 	"encoding/json"
 	"sort"
 	"strconv"
+	"strings"
 )
+
+const auditionKeyWord = "试听"
 
 func generateRadios(data [][]byte) []*Radio {
 	radios := make([]*Radio, len(data))
@@ -36,8 +39,13 @@ func generateChannel(radios []*Radio) *Channel {
 			Link:  "https://wiki.dio.wtf/gcores.xml",
 		},
 	}
-	items := make([]*Item, len(radios))
-	for i, radio := range radios {
+	items := make([]*Item, 0)
+	for i := range radios {
+		radio := radios[i]
+		title := radio.Title
+		if strings.Contains(title, auditionKeyWord) {
+			continue
+		}
 		item := &Item{
 			Title:       radio.Title,
 			Description: CData{radio.Description},
@@ -50,7 +58,7 @@ func generateChannel(radios []*Radio) *Channel {
 			Guid: radio.Audio,
 		}
 		item.Itunes(radio.Duration, radio.Thumb)
-		items[i] = item
+		items = append(items, item)
 	}
 	channel.Item = items
 	channel.Itunes("Games & Hobbies", false)

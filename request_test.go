@@ -8,7 +8,7 @@ import (
 )
 
 func TestEndPoint(t *testing.T) {
-	endpoint := generateEndPoint(10)
+	endpoint := generateEndPoint(0)
 	t.Log(endpoint)
 }
 
@@ -27,6 +27,10 @@ func TestFetch(t *testing.T) {
 
 	rss := generateRss(radios)
 	xml, err := rss.Xml()
+	if nil != err {
+		t.Error(err)
+		return
+	}
 	t.Log(string(xml))
 }
 

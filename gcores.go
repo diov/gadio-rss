@@ -30,13 +30,13 @@ func generateChannel(radios []*Radio) *Channel {
 	channel := Channel{
 		Title:       "GCores Archive",
 		Description: "机核网 www.gcores.com (Archive)",
-		Link:        "https://wiki.dio.wtf/gcores.xml",
+		Link:        "https://assets.dio.wtf/misc/gcores.xml",
 		Language:    "zh-cn",
 		Copyright:   "www.gcores.com",
 		Image: &Image{
 			Url:   "http://media.fmit.cn/feed/gadionewlogos.png",
 			Title: "GCores Archive",
-			Link:  "https://wiki.dio.wtf/gcores.xml",
+			Link:  "https://assets.dio.wtf/misc/gcores.xml",
 		},
 	}
 	items := make([]*Item, 0)

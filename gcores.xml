@@ -3,16 +3,25 @@
   <channel>
     <title>GCores Archive</title>
     <description>机核网 www.gcores.com (Archive)</description>
-    <link>https://wiki.dio.wtf/gcores.xml</link>
+    <link>https://assets.dio.wtf/misc/gcores.xml</link>
     <language>zh-cn</language>
     <copyright>www.gcores.com</copyright>
     <image>
       <url>http://media.fmit.cn/feed/gadionewlogos.png</url>
       <title>GCores Archive</title>
-      <link>https://wiki.dio.wtf/gcores.xml</link>
+      <link>https://assets.dio.wtf/misc/gcores.xml</link>
     </image>
     <itunes:image href="http://media.fmit.cn/feed/gadionewlogos.png"></itunes:image>
     <itunes:category text="Games &amp; Hobbies"></itunes:category>
+    <item>
+      <title>《DS2》预告好看，但并看不懂 GadioNews02.03</title>
+      <description><![CDATA[同开3线，小岛真的能忙得过来吗？<br/>本期时间轴制作： 佟和<br/>《地狱潜兵 2》「前线报到」预告片放出；动作游戏《剑星》将于 4 月 26 日发售；《寂静岭：The Short Message》游戏免费游玩；《Judas》公布故事预告；《龙之信条2》（Dragon's Dogma 2）动作宣传片公布；《死亡搁浅2》公布了新宣传片；次时代动作谍战作品《PHYSINT》公布.... ]]></description>
+      <pubDate>Sat, 03 Feb 2024 23:00:00 +0800</pubDate>
+      <enclosure url="https://alioss.gcores.com/uploads/audio/72150225-e384-40cd-a850-f474bcb176d3.mp3" length="74142197" type="audio/mpeg"></enclosure>
+      <guid>https://alioss.gcores.com/uploads/audio/72150225-e384-40cd-a850-f474bcb176d3.mp3</guid>
+      <itunes:duration>4633</itunes:duration>
+      <itunes:image href="https://image.gcores.com/4e933cc1393ab9b6d33eb6f38cccf489-1600-900.png"></itunes:image>
+    </item>
     <item>
       <title>年会抽奖，你爽没爽？ 天天ACG 2.2</title>
       <description><![CDATA[小会说大事，大会说小事，不去开会就没事<br/>本期时间轴制作： 老斧子<br/> 《 乐园追放》新作公布，剧场版《高达seed freedom》首周票房突破10.6亿日元，P.A.WORKS公布原创TV动画《真夜中punch》公布。本期评论环节后，说了说最近看的动画，最后的话题，说了点关于年会的回忆。 ]]></description>

@@ -30,7 +30,8 @@ jobs:
       - name: Build
         run: go build -o target/gadio-rss
       - name: Execute Binray
-        run: ./target/gadio-rss -T ${{ secrets.BOT_KEY }} ${{ github.event.inputs.args }}
+        run: ./target/gadio-rss -T ${{ secrets.BOT_KEY }} -A ${{ secrets.S3_ACCOUNT }} \
+          -K ${{ secrets.S3_KEY_ID }}  -S ${{ secrets.S3_KEY_SECRET }} ${{ github.event.inputs.args }}
       - name: Artifact Database
         uses: actions/upload-artifact@v3
         with:

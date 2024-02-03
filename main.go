@@ -10,12 +10,18 @@ var flags struct {
 	ForceRefresh bool
 	Token        string
 	Output       string
+	S3Account    string
+	S3AccessKey  string
+	S3SecretKey  string
 }
 
 func main() {
 	flag.BoolVar(&flags.ForceRefresh, "R", false, "Force refresh record")
 	flag.StringVar(&flags.Token, "T", "", "Github token")
 	flag.StringVar(&flags.Output, "O", "gcores.xml", "Output feed file path")
+	flag.StringVar(&flags.S3Account, "A", "", "S3 account id")
+	flag.StringVar(&flags.S3AccessKey, "K", "", "S3 access key")
+	flag.StringVar(&flags.S3SecretKey, "S", "", "S3 secret key")
 	flag.Parse()
 
 	log.SetOutput(os.Stdout)
@@ -26,6 +32,9 @@ func main() {
 		}
 	}
 	if err := setupDbManager(flags.ForceRefresh); nil != err {
+		log.Fatalln(err)
+	}
+	if err := setupR2Manager(flags.S3Account, flags.S3AccessKey, flags.S3SecretKey); nil != err {
 		log.Fatalln(err)
 	}
 
@@ -54,9 +63,9 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	if err := gitMgr.pushFeedFile(flags.Output); nil != err {
+	if err := r2Mgr.uploadFeedFile(flags.Output); nil != err {
 		log.Fatalln(err)
 	} else {
-		log.Println("New feed has pushed to wiki")
+		log.Println("New feed has uploaded to S3")
 	}
 }

@@ -7,8 +7,6 @@ import (
 	"strings"
 )
 
-const auditionKeyWord = "试听"
-
 func generateRadios(data [][]byte) []*Radio {
 	radios := make([]*Radio, len(data))
 	for i, datum := range data {
@@ -22,8 +20,31 @@ func generateRadios(data [][]byte) []*Radio {
 
 func generateRss(radios []*Radio) *Rss {
 	rss := defaultRss()
+	radios = filterChannel(radios)
 	rss.Channel = generateChannel(radios)
 	return rss
+}
+
+func filterChannel(radios []*Radio) []*Radio {
+	keywords := []string{"试听", "录音笔"}
+	filtered := make([]*Radio, 0)
+	for i := range radios {
+		radio := radios[i]
+		title := radio.Title
+
+		skip := false
+		for j := range keywords {
+			if strings.Contains(title, keywords[j]) {
+				skip = true
+				break
+			}
+		}
+		if skip {
+			continue
+		}
+		filtered = append(filtered, radio)
+	}
+	return filtered
 }
 
 func generateChannel(radios []*Radio) *Channel {
@@ -42,10 +63,6 @@ func generateChannel(radios []*Radio) *Channel {
 	items := make([]*Item, 0)
 	for i := range radios {
 		radio := radios[i]
-		title := radio.Title
-		if strings.Contains(title, auditionKeyWord) {
-			continue
-		}
 		item := &Item{
 			Title:       radio.Title,
 			Description: CData{radio.Description},

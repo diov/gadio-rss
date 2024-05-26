@@ -15,13 +15,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v5
         with:
           go-version: 'stable'
       - name: Check out code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Cache go module
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
@@ -34,7 +34,7 @@ jobs:
           ./target/gadio-rss -T ${{ secrets.BOT_KEY }} -A ${{ secrets.S3_ACCOUNT }} \
             -K ${{ secrets.S3_KEY_ID }} -S ${{ secrets.S3_KEY_SECRET }} ${{ github.event.inputs.args }}
       - name: Artifact Database
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: record.db
           retention-days: 1

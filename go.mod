@@ -33,6 +33,6 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.54.3
 	github.com/aws/smithy-go v1.20.2 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
-	golang.org/x/crypto v0.23.0 // indirect
-	golang.org/x/sys v0.20.0 // indirect
+	golang.org/x/crypto v0.31.0 // indirect
+	golang.org/x/sys v0.28.0 // indirect
 )

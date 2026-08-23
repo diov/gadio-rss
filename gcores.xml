@@ -14,6 +14,33 @@
     <itunes:image href="http://media.fmit.cn/feed/gadionewlogos.png"></itunes:image>
     <itunes:category text="Games &amp; Hobbies"></itunes:category>
     <item>
+      <title>从夯到拉锐评今年玩到的各种游戏【视频播客音频版】</title>
+      <description><![CDATA[<br/>欢迎回到“核电波”！今天我们尝试从夯到拉“锐评”1-8月玩过的单机游戏，仅个人观点！ 本期为机核视频播客节目音频版，若大家想看我们在录节目的时候究竟是什么样的状态,可以关注我们的B站账号【核电波】   <br/>本期主播：Nadya / 西蒙 / Ryoma ]]></description>
+      <pubDate>Sun, 23 Aug 2026 16:10:00 +0800</pubDate>
+      <enclosure url="https://alioss.gcores.com/uploads/audio/f3e9a186-f2af-4ed9-b42c-88199bd77e69.mp3" length="78805487" type="audio/mpeg"></enclosure>
+      <guid>https://alioss.gcores.com/uploads/audio/f3e9a186-f2af-4ed9-b42c-88199bd77e69.mp3</guid>
+      <itunes:duration>4925</itunes:duration>
+      <itunes:image href="https://image.gcores.com/65f7a82fbbc383b455114cb271722207-1600-900.jpg"></itunes:image>
+    </item>
+    <item>
+      <title>EP12.寻找张伟：关于卷积神经网络一段不为人知的往事</title>
+      <description><![CDATA[<br/>更正和补充：<br/>LeCun 的论文于1989 年 7 月投稿、9 月接受、12 月发表，前后约 5 个月。<br/>芝加哥大学时期，SIANN主要用于对候选区域做分类和假阳性筛除；到了R2的商业系统，张伟将其改造成CNN 全图扫描 + 传统算法二次过滤的混合架构。为适应 90 年代有限的算力，他还引入可分离卷积核，将 2D 卷积拆成两个 1D 卷积，大幅降低计算量。<br/>R2 的ImageChecker成为 FDA 批准的首个放射影像 AI 产品。到 2000 年代中期，每年已辅助数千万例读片，并形成数亿美元规模的保险支付。<br/>------------------------------------------------------------------<br/>我是在 Wikipedia 上查卷积神经网络历史的时候，第一次看到Wei Zhang这个名字的。<br/>Wiki页面上写着：1988 年，他用反向传播训练了一个具有平移不变性的神经网络。时间甚至早于 LeCun 那篇后来广为人知的工作。可问题是：Wei Zhang 到底是谁？为什么后来几乎没人提起？<br/>我就从这一行 Wikipedia 开始往下挖。顺着论文、合作者、ResearchGate、芝加哥大学，再一路追到硅谷，最后真的联系上了张伟本人，并在圣何塞和他见了面。<br/>这个过程中，我发现自己追出来的已经不只是一个“早期 CNN 先驱”的故事。它一路牵出了福岛邦彦的 Neocognitron、Rumelhart 和 McClelland 的反向传播、八十年代日本的光计算、芝加哥大学的医学影像 AI，以及后来真正进入医院的 R2 ImageChecker。<br/>更有意思的是，张伟最初学的是光学，后来做神经网络、医学影像、硅谷创业，兜兜转转几十年，最后又回到了光学器件。<br/>这期节目，就是从 Wikipedia 上一个名字出发，试着把这条几乎断掉的历史线重新接起来。<br/>本期话题：Wei Zhang 与 SIANN｜福岛邦彦与 Neocognitron｜Rumelhart、McClelland 与反向传播｜Yann LeCun 与 CNN 的平行发现｜八十年代日本与光计算｜芝加哥大学医学影像 CAD｜R2 Technology 与 ImageChecker｜FDA 与医保支付｜科学史中的马太效应<br/>特别鸣谢：张伟接受采访并提供大量一手资料；Xun 为节目制作片头音乐；夏天和张伟试听本期节目，并提供了宝贵意见。<br/>章节时间轴<br/>00:11片头与节目介绍<br/>01:10序：1991 年西雅图 IJCNN 与 Fukushima 的“行李箱”<br/>02:26节目缘起：为什么开始寻找张伟<br/>04:17关键发现：Wei Zhang 1988 年的 shift-invariant neural network<br/>05:53沿论文、ResearchGate 与芝加哥大学追踪张伟<br/>08:37两年后重新启动寻找<br/>09:07写信联系 Maryellen L. Giger<br/>10:40Giger 回信，并把邮件转给张伟本人<br/>11:06张伟回应：1994 年离开学术界进入硅谷<br/>12:38见面前补论文与履历<br/>14:04张伟的光学教育背景与中国现代光学史<br/>16:01大阪大学：市冈芳树实验室与光计算<br/>17:0580 年代日本泡沫经济与第五代计算机计划<br/>18:17福岛邦彦与 Neocognitron（新认知机）<br/>19:29Hubel–Wiesel、S-cell / C-cell 与视觉系统<br/>24:42PDP 与反向传播<br/>28:39SIANN：Neocognitron 结构 + Backpropagation<br/>31:14LeCun 的平行工作与 multiple discovery<br/>32:49引用差距与科学界的马太效应<br/>33:13SIANN 转向医学影像<br/>33:53早期显微图像分割与 U-Net 的时代对照<br/>34:20进入芝加哥大学医学影像 CAD 团队<br/>35:13后续工业界与光纤通信经历<br/>41:14北圣何塞星巴克：终于见到张伟<br/>45:29张伟解释：为什么删掉 Neocognitron 的横向连接<br/>51:26谈 Schmidhuber、学术认可与优先权<br/>53:44R2 Technology 的起点<br/>55:13ImageChecker M1000 与 FDA PMA<br/>57:32Medicare reimbursement：医学 AI 的商业闭环<br/>59:22“水利工程 / 水车”比喻<br/>59:54技术、FDA 与医保支付体系<br/>-<br/>-<br/>-<br/>-<br/>-<br/>-<br/>-<br/>-<br/>-<br/>Reference：<br/>半拿铁《人工智能风云录》第一期:https://www.xiaoyuzhoufm.com/episode/63f74a9c79d1c9aec859dfce<br/>张伟 SIANN / Applied Optics 论文:https://people.idsia.ch/~juergen/Zhang-April1989-AppliedOptics-SIANN.pdf<br/>LeCun 人手写邮编识别论文:https://ieeexplore.ieee.org/document/6795724<br/>Fukushima 福岛邦彦 Neocognitron 论文（1980）:https://www.cs.princeton.edu/courses/archive/spr08/cos598B/Readings/Fukushima1980.pdf<br/>Hubel & Wiesel 猫视觉皮层经典论文:https://pubmed.ncbi.nlm.nih.gov/14449617/<br/>Jürgen Schmidhuber 关于卷积神经网络早期发明人的介绍:https://people.idsia.ch/~juergen/who-invented-convolutional-neural-networks.html<br/>相关播客节目:https://www.xiaoyuzhoufm.com/episode/69457cfae0674912edd86097?s=eyJ1IjogIjY1YmQ5NDY0ZWRjZTY3MTA0YWRhYjJlZCJ9<br/>YouTube 上介绍张伟工作的影片:https://www.youtube.com/watch?v=PWZQ6UoxAW4&t=714s]]></description>
+      <pubDate>Sun, 23 Aug 2026 01:47:20 +0800</pubDate>
+      <enclosure url="https://dts-api.xiaoyuzhoufm.com/track/6805ccf073016b629319302a/6a89cfd4ef65145dfcc3ba29/media.xyzcdn.net/6805ccf073016b629319302a/lkvA5bLcZRNmWMI8fV4_jbiH_cNU.m4a" length="69652716" type="audio/mpeg"></enclosure>
+      <guid>https://dts-api.xiaoyuzhoufm.com/track/6805ccf073016b629319302a/6a89cfd4ef65145dfcc3ba29/media.xyzcdn.net/6805ccf073016b629319302a/lkvA5bLcZRNmWMI8fV4_jbiH_cNU.m4a</guid>
+      <itunes:duration>4302</itunes:duration>
+      <itunes:image href="https://image.gcores.com/29bed376-f3bb-4d9f-87dc-037ccbe4dd8c-590-590.png"></itunes:image>
+    </item>
+    <item>
+      <title>[281]游戏回_钟馗王者归来</title>
+      <description><![CDATA[<br/>本期主题<br/>1、《黑神话：钟馗》<br/>2、黄昏血族<br/>3、《GTA6》泄露视频<br/>4、《牛来》的一些想法<br/>5、《奥德赛》]]></description>
+      <pubDate>Sat, 22 Aug 2026 23:37:47 +0800</pubDate>
+      <enclosure url="https://dts-api.xiaoyuzhoufm.com/track/62294a6b07d0b5937b63b4d1/6a89be39ef65145dfcc3b488/media.xyzcdn.net/62294a6b07d0b5937b63b4d1/ls-uZdXRCaFdqpEhE-EN6nWNeYZo.m4a" length="98810392" type="audio/mpeg"></enclosure>
+      <guid>https://dts-api.xiaoyuzhoufm.com/track/62294a6b07d0b5937b63b4d1/6a89be39ef65145dfcc3b488/media.xyzcdn.net/62294a6b07d0b5937b63b4d1/ls-uZdXRCaFdqpEhE-EN6nWNeYZo.m4a</guid>
+      <itunes:duration>6104</itunes:duration>
+      <itunes:image href="https://image.gcores.com/d2da0f84-83ea-41c3-8945-d1f23c22103c-1800-1800.jpg"></itunes:image>
+    </item>
+    <item>
       <title>遥遥领先，核周报8.22</title>
       <description><![CDATA[是兄弟就来砍我<br/>本期时间轴制作： 西楼<br/>本周要闻：《黑神话：钟馗》公布15分钟实机演示；《影之刃零》索尼专场SOP详解玩法及故事；《湮灭之潮》公布最新实机演示；《昭和米国物语》揭晓科隆游戏展试玩详情；《GTA6》实机视频再遭黑客泄露；科隆游戏展公布2026年参展数据；2K Games成立全新体育游戏工作室Small Axe Studio；迪士尼D23 2026大会上公布《王国之心4》将于2027年末发售等。]]></description>
       <pubDate>Sat, 22 Aug 2026 23:00:00 +0800</pubDate>
